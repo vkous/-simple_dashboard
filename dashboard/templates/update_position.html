@@ -1,0 +1,25 @@
+{# app/templates/hello.html #}
+
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h3>Mise à jour position (Todo)</h3>
+    <form>
+        <div class="form-group">
+          <label for="InputLatitude">Latitude</label>
+          <input type="text" class="form-control" id="InputLatitude" aria-describedby="LatitudeHelp" placeholder="Saisir latitude">
+          <small id="LatitudeHelp" class="form-text text-muted">Exemple : 49.2332
+            </small>
+        </div>
+        <div class="form-group">
+          <label for="InputLongitude">Longitude</label>
+          <input type="text" class="form-control" id="InputLongitude" aria-describedby="LongitudeHelp" placeholder="Saisir longitude">
+          <small id="LongitudeHelp" class="form-text text-muted">Exemple : 2.2845
+            </small>
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+      </form>
+      
+{% endblock content %}

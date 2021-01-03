@@ -1,0 +1,50 @@
+{# app/templates/hello.html #}
+
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    {% if basic_content_boolean %}
+    <h3>Liens rapides
+
+    </h3>
+    <h4>Choix Position</h4>
+    <p>
+      <a href="{{url_for('index',set_home='')}}" class="btn btn-primary">Maison</a>
+      <a href="{{url_for('index',set_office='')}}" class="btn btn-primary">Bureau</a>
+        
+    </p>
+    <h4>Fonctionnalité</h4>
+    <p>
+        <a href="{{url_for('view_weather')}}" class="btn btn-primary">Météo</a>
+        <a href="{{url_for('view_bikes')}}" class="btn btn-primary">Vélib</a>
+        <a href="{{url_for('view_metro')}}"  class="btn btn-primary">Métro</a>
+    </p>
+    {% else %}
+        {% if metro_table_html %}
+        <h3>Métro</h3>
+        <div>{{metro_table_html|safe}}</div>
+        <div class="last_update"><i>Dernière mise à jour le {{last_update_metro}}</i> - <a href="{{url_for('view_metro', update='')}}">Mettre à jour</a></div>
+        {% endif %}
+
+        {% if weather_table_html %}
+        <h3>Météo</h3>
+        <!--Weather table html-->
+        <div>{{weather_table_html|safe}}</div>
+        <!--Weather update html-->
+        <div class="last_update"><i>Dernière mise à jour le {{last_update_weather}}</i> - <a href="{{url_for('view_weather', update='')}}">Mettre à jour</a></div>
+
+        {% endif %}
+
+        <!--{{ super() }}-->
+        {% if bikes_table_html %}
+        <h3>Vélib</h3>
+        <!--Velib table html-->
+        <div>{{bikes_table_html|safe}}</div>
+        <!--Velib update html-->
+        <div class="last_update"><i>Dernière mise à jour le {{last_update_bikes}}</i> - <a href="{{url_for('view_bikes', update='')}}">Mettre à jour</a></div>
+        {% endif %}
+    {% endif %}
+
+{% endblock content %}

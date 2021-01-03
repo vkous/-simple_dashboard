@@ -1,0 +1,8 @@
+# fill-in and rename this file ".env"
+HOME_LATITUDE=
+HOME_LONGITUDE=
+OFFICE_LATITUDE=
+OFFICE_LONGITUDE=
+METRO_LINES='["4", "8"]'
+SECRET_KEY=
+DB_PASSWORD=
