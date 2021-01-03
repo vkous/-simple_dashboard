@@ -21,6 +21,8 @@ class APICaller:
         self.db_tablename = 'mytable' #for mytable_daily, use mytable as "table" and key as "daily"
         self.data_list = ['key1','key2'] 
         self.key_as_table = False
+        self.sql_where_criteria = \
+            f'latitude ={self.latitude} AND longitude = {self.longitude}'
         self.API_base_url = 'https://apiurl/'
         self.data_dict = {'data_name':pd.DataFrame({})}
         self.restriction_query_dict = {}
@@ -150,13 +152,12 @@ class APICaller:
 
         _query_string = (
             f'SELECT {self.db_tablename}_date FROM {_full_tablename} \
-                WHERE latitude = {self.latitude} \
-                AND longitude = {self.longitude} \
+                WHERE {self.sql_where_criteria} \
                 ORDER BY {self.db_tablename}_date DESC \
                 LIMIT 1;'
                 )
-        _query = query_db(_query_string)
         print(_query_string)
+        _query = query_db(_query_string)
         if _query != []:
             for date_query in _query:
                 return {'existing_entry_status' : True, 'last_date' : date_query[0]}
@@ -189,8 +190,7 @@ class APICaller:
             _full_tablename = self.db_tablename
             
         _query_last_update_string = f"SELECT * FROM {_full_tablename} \
-                        WHERE latitude ={self.latitude} \
-                        AND longitude = {self.longitude} \
+                        WHERE {self.sql_where_criteria} \
                         AND {self.db_tablename}_date >= '{_last_update_date}';"
         print(_query_last_update_string)
         return pd.read_sql(

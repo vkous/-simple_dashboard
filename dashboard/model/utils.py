@@ -35,6 +35,7 @@ def replace_svg_and_translate(html_string):
 
 def translate_weekdays_to_french(html_or_string):
     return html_or_string\
+                .replace('Monday','Lundi')\
                 .replace('Tuesday','Mardi')\
                 .replace('Wednesday','Mercredi')\
                 .replace('Thursday','Jeudi')\
