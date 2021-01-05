@@ -9,18 +9,18 @@ from datetime import timedelta, datetime
 
 class WeatherCaller(APICaller):
     def __init__(self, latitude, longitude, delta_mins):
-        super().__init__(latitude, longitude, delta_mins)
-        self.logger_name = 'Weather'
-        self.db_tablename = 'weather' 
-        self.key_as_table = True
-        self.data_list = ['daily','hourly']
-        self.API_base_url = API_WEATHER_URL
-        self.restriction_columns_dict={
+        super().__init__(latitude=latitude, longitude=longitude, delta_mins=delta_mins)
+        self._logger_name = 'Weather'
+        self._db_tablename = 'weather' 
+        self._key_as_table = True
+        self._data_list = ['daily','hourly']
+        self._API_base_url = API_WEATHER_URL
+        self._restriction_columns_dict={
             'daily': ['weather_weekday','weather_day', 'temp_min','temp_max','latitude','longitude','weather_date','icon'],
             'hourly': ['weather_weekday','hour','temp','latitude','longitude','weather_date','icon']
         }
 
-    def clean_decoded_API_data(self, json_data):
+    def _clean_decoded_API_data(self, json_data):
         #Todo : break_up cleaning
 
         # Clean Hourly Data
@@ -28,6 +28,7 @@ class WeatherCaller(APICaller):
         _watched_hours_list = json.loads(os.getenv('WEATHER_HOURS'))
         _weather_hour_string_list = []
         _weather_datetime_string_list = []
+
         for hour in _watched_hours_list:
             _weather_hour_string_list.append(
                 _weather_h0_h12_pdf.loc[hour,:]['weather'][0]['description']
@@ -36,7 +37,7 @@ class WeatherCaller(APICaller):
                 datetime.fromtimestamp(_weather_h0_h12_pdf.loc[hour,:]['dt']).hour
             )
         _hourly_weather_pdf = \
-            _weather_h0_h12_pdf.loc[_watched_hours_list,:].drop('weather',axis=1) # < A REVERIFIER SI ERREUR
+            _weather_h0_h12_pdf.loc[_watched_hours_list,:].drop('weather',axis=1) # < MAY CAUSE ERROR?
         _hourly_weather_pdf.loc[:,'weather'] = _weather_hour_string_list
         _hourly_weather_pdf.loc[:,'weather_weekday'] = 'today'
         _hourly_weather_pdf.loc[:,'temp'] = _hourly_weather_pdf.loc[:,'temp'].copy().astype('int32')
@@ -65,15 +66,14 @@ class WeatherCaller(APICaller):
         for column in ['humidity','wind_speed','temp_min','temp_max']:
             _daily_weather_pdf.loc[:,column] = _daily_weather_pdf[column].fillna(0).copy().astype('int32')
         _daily_weather_pdf = map_weather_icons_to_forecast(_daily_weather_pdf)
+
         self.data_dict =  {
             'hourly': _hourly_weather_pdf,
             'daily': _daily_weather_pdf
         }
-        print(self.data_dict)
         return self.data_dict
 
     def prepare_data_for_html(self):
-        print('data_dict', self.data_dict)
         _daily_pdf = self.data_dict['daily']
         _hourly_pdf = self.data_dict['hourly']
         _update_time_string = pd.to_datetime(_daily_pdf['weather_date']\
@@ -87,5 +87,8 @@ class WeatherCaller(APICaller):
             'daily' : _daily_pdf,
             'hourly' : _hourly_pdf
             }
+
+    def to_html(self):
+        return {}
         
     
