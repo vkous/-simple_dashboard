@@ -15,7 +15,9 @@ import json
 from .model.weathercaller import WeatherCaller
 from .model.raincaller import RainCaller
 from .model.metrocaller import MetroCaller
+from .model.bikescaller import BikesCaller
 from .model.utils import weather_and_rain_to_html
+from .model.utils import force_update
 
 @app.route('/', methods=['GET'])
 def index():
@@ -67,8 +69,25 @@ def view_bikes():
     if session.get('delta_mins') is None:
         session['delta_mins'] = 15
     if request.args.get('update') is not None:
-        return utils.force_update()
-    return True
+        return force_update()
+
+
+    bikes = BikesCaller(
+        latitude = session['latitude'],
+        longitude = session['longitude'],
+        delta_mins = session['delta_mins'])
+    
+    bikes.check_and_update_db()
+    #reset forced update data when data is got
+    session['delta_mins'] = 15
+
+    return render_template(
+        'dashboard.html',
+        bikes_table_html=bikes.to_html()['velib_status'],
+        last_update_bikes = bikes.last_update,
+        latitude = session['latitude'],
+        longitude = session['longitude']
+    )
 
     
 @app.route('/view_weather', methods=['GET'])
@@ -92,7 +111,8 @@ def view_weather():
         delta_mins = session['delta_mins']
     )
     weather.check_and_update_db()
-
+    #reset forced update data when data is got
+    session['delta_mins'] = 15
     rain = RainCaller(
         latitude = session['latitude'],
         longitude = session['longitude'],
@@ -126,6 +146,9 @@ def view_metro():
         delta_mins = session['delta_mins']
     )
     metro.check_and_update_db()
+    #reset forced update data when data is got
+    session['delta_mins'] = 15
+    
     metro_html = metro.to_html()
     return render_template(
         'dashboard.html',
