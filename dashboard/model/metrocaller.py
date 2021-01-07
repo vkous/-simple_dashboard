@@ -29,7 +29,6 @@ class MetroCaller(APICaller):
 
 
     def _add_additional_data(self):
-        print(self.data_dict)
         for key in self.data_dict.keys():
             self.data_dict[key].loc[:, self._db_tablename + '_date'] \
                 = datetime.now().strftime('%Y-%m-%d %H:%M:%S')

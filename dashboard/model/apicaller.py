@@ -83,7 +83,6 @@ class APICaller:
 
 
     def _add_additional_data(self):
-        print(self.data_dict)
         for key in self.data_dict.keys():
             self.data_dict[key].loc[:,'latitude'] = self._latitude
             self.data_dict[key].loc[:,'longitude'] = self._longitude
@@ -157,11 +156,12 @@ class APICaller:
                 ORDER BY {self._db_tablename}_date DESC \
                 LIMIT 1;'
                 )
-        print(_query_string)
+        #print(_query_string)
         _query = query_db(_query_string)
         if _query != []:
             for date_query in _query:
-                self.last_update = date_query[0] #FORMAT DATE
+                self.last_update = date_query[0]
+                self.last_update = self.last_update .strftime('%d/%m à %H:%M')
                 return {'existing_entry_status' : True, 'last_date' : date_query[0]}
         else:
             return {'existing_entry_status' : False}
@@ -170,11 +170,9 @@ class APICaller:
         _out_dict = {}
         if delta_mins == 0:
             delta_mins = self._delta_mins
-        print(self._db_tablename)
         for key in self._data_list:
             _out_dict[key] = self._read_last_available_data_by_key(additional_key=key)
         
-        print(_out_dict)
         return _out_dict
 
 
@@ -196,7 +194,7 @@ class APICaller:
         _query_last_update_string = f"SELECT * FROM {_full_tablename} \
                         WHERE {self._sql_where_criteria} \
                         AND {self._db_tablename}_date >= '{_last_update_date}';"
-        print(_query_last_update_string)
+        #print(_query_last_update_string)
         return pd.read_sql(
             _query_last_update_string,
             con=_sql_con

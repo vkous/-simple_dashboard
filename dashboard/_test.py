@@ -97,13 +97,7 @@ def view_weather():
     if session.get('delta_mins') is None:
         session['delta_mins'] = 15
     if request.args.get('update') is not None:
-        return utils.force_update()
-
-    #force update
-    if session.get('delta_mins') is None:
-        session['delta_mins'] = 15
-    if request.args.get('update') is not None:
-        return utils.force_update()
+        return force_update()
 
     weather = WeatherCaller(
         latitude = session['latitude'],
@@ -138,7 +132,7 @@ def view_metro():
     if session.get('delta_mins') is None:
         session['delta_mins'] = 15
     if request.args.get('update') is not None:
-        return utils.force_update()
+        return force_update()
 
     metro = MetroCaller(
         latitude = session['latitude'],
@@ -148,7 +142,7 @@ def view_metro():
     metro.check_and_update_db()
     #reset forced update data when data is got
     session['delta_mins'] = 15
-    
+
     metro_html = metro.to_html()
     return render_template(
         'dashboard.html',

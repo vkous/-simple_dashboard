@@ -81,8 +81,12 @@ class WeatherCaller(APICaller):
 
         _daily_pdf = _daily_pdf[['weather_weekday','temp_min','temp_max','icon']]
         _daily_pdf.columns = ['Jour','Min','Max','Météo']
+        _daily_pdf.loc[:,'Min'] = _daily_pdf.loc[:,'Min'].apply(str) + '°C'
+        _daily_pdf.loc[:,'Max'] = _daily_pdf.loc[:,'Max'].apply(str) + '°C'
         _hourly_pdf = _hourly_pdf[['hour','temp','icon']]
         _hourly_pdf.columns = ['Heure','Température','Météo']
+        _hourly_pdf.loc[:,'Heure'] = _hourly_pdf.loc[:,'Heure'].apply(str) + 'H' 
+        _hourly_pdf.loc[:,'Température'] = _hourly_pdf.loc[:,'Température'].apply(str) + '°C'
         return {
             'daily' : _daily_pdf,
             'hourly' : _hourly_pdf
