@@ -59,5 +59,5 @@ def create_app(test_config=None):
         if not os.path.exists(app.config['DATABASE']):
             db.init_db()
         #from . import routes
-        from . import _test
+        from . import routes
     return app

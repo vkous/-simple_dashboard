@@ -4,8 +4,8 @@ from .constants import API_VELIB_URL
 import pandas as pd
 import numpy as np
 class BikesCaller(APICaller):
-    def __init__(self, latitude, longitude, delta_mins):
-        super().__init__(latitude, longitude, delta_mins)
+    def __init__(self):
+        super().__init__()
         self._logger_name = 'Bikes'
         self._db_tablename = 'bikes' 
         self._data_list = ['velib_status']

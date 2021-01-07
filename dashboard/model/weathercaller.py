@@ -8,8 +8,8 @@ import pandas as pd
 from datetime import timedelta, datetime
 
 class WeatherCaller(APICaller):
-    def __init__(self, latitude, longitude, delta_mins):
-        super().__init__(latitude=latitude, longitude=longitude, delta_mins=delta_mins)
+    def __init__(self):
+        super().__init__()
         self._logger_name = 'Weather'
         self._db_tablename = 'weather' 
         self._key_as_table = True

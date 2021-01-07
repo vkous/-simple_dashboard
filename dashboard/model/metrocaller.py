@@ -8,8 +8,8 @@ import os
 from datetime import timedelta, datetime
 
 class MetroCaller(APICaller):
-    def __init__(self, latitude, longitude, delta_mins):
-        super().__init__(latitude, longitude, delta_mins)
+    def __init__(self):
+        super().__init__()
         self._logger_name = 'Metro'
         self._db_tablename = 'metro' 
         self._data_list = ['metro_status']

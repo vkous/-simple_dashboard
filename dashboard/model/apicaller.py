@@ -9,14 +9,15 @@ from datetime import timedelta, datetime
 from flask import current_app, url_for, session
 
 from .utils import replace_latitude_longitude, isnumber
+from .flask_utils import reinitialize_session_delta_mins
 from .db import get_db, query_db
 
 
 class APICaller:
-    def __init__(self, latitude, longitude, delta_mins):
-        self._latitude = latitude
-        self._longitude = longitude
-        self._delta_mins = delta_mins
+    def __init__(self):
+        self._latitude = session['latitude']
+        self._longitude = session['longitude']
+        self._delta_mins = session['delta_mins']
         self.last_update = 'inconnu'
         self.data_dict = {'data_name':pd.DataFrame({})}
 
@@ -229,7 +230,9 @@ class APICaller:
         else:
             current_app.logger.info(f'{self._logger_name} | Reading last updated data')
             self.data_dict = self._read_last_available_updated_data()
-
+        
+        #reset delta_mins for next update / no update for object (object is not reused)
+        reinitialize_session_delta_mins()
     
     def print_data(self):
         for key,data_pdf in self.data_dict.items():
