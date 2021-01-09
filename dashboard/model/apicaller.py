@@ -10,7 +10,7 @@ from flask import current_app, url_for, session
 
 from .utils import replace_latitude_longitude, isnumber
 from .flask_utils import reinitialize_session_delta_mins
-from .db import get_db, query_db
+from .db import get_db, query_db, change_db
 
 
 class APICaller:
@@ -141,6 +141,22 @@ class APICaller:
         return True
 
 
+    def _delete_old_entries(self, nb_days_history=7):
+        current_app.logger.info(f'{self._logger_name} | delete old entries in db {self._db_tablename}')
+        _sql_con = get_db()
+        _seven_days_ago_date = (datetime.now() - timedelta(days=nb_days_history))
+        if self._key_as_table is True:
+            table_list = [self._db_tablename + '_' + str(key) for key in self._data_list]
+        else : 
+            table_list = [self._db_tablename]
+        for key, table in zip(self._data_list, table_list):
+            _delete_query = (
+                f'DELETE FROM {table} \
+                WHERE {self._db_tablename}_date < "{_seven_days_ago_date}";'
+            )
+            current_app.logger.info(f'{self._logger_name} | delete SQL query : {_delete_query}')
+
+            _query = change_db(_delete_query)
 
     def _check_if_db_is_not_empty_and_get_last_date(self, key=''):
         # note : if several keys in data_list, loads only with the first key
@@ -201,11 +217,13 @@ class APICaller:
             con=_sql_con
         )
 
+
     def _update_db_with_new_data(self):
         self._load_and_clean_data()
         if self._update_boolean is True:
             self._save_data_dict()
             self._update_boolean = False
+            self._delete_old_entries()
             return True
         else: # TODO : to be checked / necessary case??
             #error loading API => read older entry

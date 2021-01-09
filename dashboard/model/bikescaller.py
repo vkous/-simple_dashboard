@@ -3,6 +3,7 @@ from .constants import API_VELIB_URL
 
 import pandas as pd
 import numpy as np
+
 class BikesCaller(APICaller):
     def __init__(self):
         super().__init__()

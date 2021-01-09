@@ -4,7 +4,6 @@ from .constants import API_METRO_URL
 import pandas as pd
 import json
 import os
-
 from datetime import timedelta, datetime
 
 class MetroCaller(APICaller):

@@ -54,3 +54,8 @@ def query_db(query, args=(), one=False):
     rv = cur.fetchall()
     cur.close()
     return (rv[0] if rv else None) if one else rv
+
+def change_db(query,args=()):
+    cur = get_db().execute(query, args)
+    get_db().commit()
+    cur.close()
