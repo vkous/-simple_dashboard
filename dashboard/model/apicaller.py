@@ -9,15 +9,20 @@ from datetime import timedelta, datetime
 from flask import current_app, url_for, session
 
 from .utils import replace_latitude_longitude, isnumber
-from .flask_utils import reinitialize_session_delta_mins
+from .flask_utils import reinitialize_session_delta_mins, check_delta_mins
+from .localisation_utils import check_default_position
 from .db import get_db, query_db, change_db
 
 
 class APICaller:
     def __init__(self):
+        check_default_position()
         self._latitude = session['latitude']
         self._longitude = session['longitude']
+
+        check_delta_mins()
         self._delta_mins = session['delta_mins']
+
         self.last_update = 'inconnu'
         self.data_dict = {'data_name':pd.DataFrame({})}
 
