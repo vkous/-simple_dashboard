@@ -7,7 +7,7 @@ class BaseConfig():
 
    STATIC_FOLDER = '/static'
    TEMPLATES_FOLDER = '/templates'
-   DATABASE = os.environ['DATABASE']
+   DATABASE = "database.db"
 
 class DevConfig(BaseConfig):
    FLASK_ENV = 'development'
@@ -16,9 +16,11 @@ class DevConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
    FLASK_ENV = 'production'
+   DATABASE = "/var/www/dashboard/dashboard/database.db"
 
 
 class TestConfig(BaseConfig):
    FLASK_ENV = 'development'
+   DATABASE = "/var/www/dashboard/dashboard/database.db"
    TESTING = True
    DEBUG = True
