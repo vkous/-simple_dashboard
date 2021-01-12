@@ -11,9 +11,10 @@ from logging.handlers import RotatingFileHandler
 
 from dashboard.model import *
 
-import dashboard.config
 
 load_dotenv()
+import dashboard.config
+
 
 def create_app(test_config=None):
     # create and configure the app
