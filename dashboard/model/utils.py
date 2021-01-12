@@ -44,11 +44,6 @@ def translate_weekdays_to_french(html_or_string):
                 .replace('Sunday','Dimanche')
 
 
-def force_update():
-    session['delta_mins'] = 1
-    return redirect(request.referrer)
-
-
 def build_collapse_html_block(html, id_name, collapse_text):
     return  f'<br />\
         <p><a class="btn btn-primary" data-toggle="collapse" href="#Collapse{id_name}"\
