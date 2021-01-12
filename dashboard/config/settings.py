@@ -1,11 +1,13 @@
+import os
+
 class BaseConfig():
 
    TESTING = False
    DEBUG = False
-   
+
    STATIC_FOLDER = '/static'
    TEMPLATES_FOLDER = '/templates'
-   DATABASE = 'database.db'
+   DATABASE = os.environ['DATABASE']
 
 class DevConfig(BaseConfig):
    FLASK_ENV = 'development'

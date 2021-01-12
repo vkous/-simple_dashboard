@@ -41,10 +41,6 @@ def create_app(test_config=None):
         app.logger.info('instance path already exists')
         pass
     app.logger.info('Configurate flask_app attributes')
-    #app.config['STATIC_FOLDER'] = '/static'
-    #app.config['TEMPLATES_FOLDER'] = '/templates'
-    #app.config['DATABASE'] = os.getenv('DATABASE_PATH')
-    #'database.db'
     app.permanent_session_lifetime = datetime.timedelta(days=365)
 
 
