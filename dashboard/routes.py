@@ -25,6 +25,8 @@ from .model.localisation_utils import (
 
 @app.route('/',methods=['GET'])
 def index():
+    check_default_position()
+    check_delta_mins()
     return get_index_or_get_and_set_latitude_and_longitude()
 
 
@@ -49,7 +51,7 @@ def view_bikes():
 @app.route('/view_weather', methods=['GET'])
 def view_weather():
     #TODO : when latitude & longitude are not defined
-
+    check_default_position()
     check_delta_mins()
 
     weather = WeatherCaller()
@@ -71,6 +73,7 @@ def view_weather():
     
 @app.route('/view_metro', methods=['GET'])
 def view_metro():
+    check_default_position()
     check_delta_mins()
 
     metro = MetroCaller()

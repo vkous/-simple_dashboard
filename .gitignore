@@ -64,6 +64,8 @@ db.sqlite3-journal
 
 # Flask stuff:
 .env
+.wsgi
+.txt
 __pycache__/
 **/__pycache__/
 *.pyc

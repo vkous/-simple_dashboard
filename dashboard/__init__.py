@@ -11,6 +11,8 @@ from logging.handlers import RotatingFileHandler
 
 from dashboard.model import *
 
+import dashboard.config
+
 load_dotenv()
 
 def create_app(test_config=None):
@@ -24,20 +26,12 @@ def create_app(test_config=None):
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     app.logger.info('======================= START ======================= ')
-    
-    app.config.from_mapping(
-        SECRET_KEY=os.getenv('SECRET_KEY'),
-        DATABASE=os.path.join(app.instance_path, 'dashboard_db.sqlite'),
-    )
+    app.logger.info(f'Starting app in {config.APP_ENV} environment')
+    app.config.from_object('dashboard.config')
+    app.config.update(
+        SECRET_KEY=os.environ.get('FLASK_SECRET')
+)
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.logger.info('Load config.py')
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.logger.info('Load test config if passed in')
-        app.config.from_mapping(test_config)
 
     # ensure the instance folder exists
     try:
@@ -47,10 +41,10 @@ def create_app(test_config=None):
         app.logger.info('instance path already exists')
         pass
     app.logger.info('Configurate flask_app attributes')
-    app.config['FLASK_DEBUG'] = True
-    app.config['STATIC_FOLDER'] = '/static'
-    app.config['TEMPLATES_FOLDER'] = '/templates'
-    app.config['DATABASE'] = 'database.db'
+    #app.config['STATIC_FOLDER'] = '/static'
+    #app.config['TEMPLATES_FOLDER'] = '/templates'
+    #app.config['DATABASE'] = os.getenv('DATABASE_PATH')
+    #'database.db'
     app.permanent_session_lifetime = datetime.timedelta(days=365)
 
 

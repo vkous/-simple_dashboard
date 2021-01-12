@@ -65,7 +65,7 @@ def _set_office_position():
 
 
 def check_default_position():
-    if (session['latitude'] is None) | (session['longitude'] is None):
+    if not (('latitude' in session) &  ('longitude' in session)):
         _set_home_position()
 
 def get_index_or_get_and_set_latitude_and_longitude():

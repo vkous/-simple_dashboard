@@ -12,7 +12,6 @@ import os
 import json
 
 
-
 def redirect_to_last_page():
     last_page_url = request.referrer
     if request.referrer.split('?')[0] == url_for('index'):
@@ -29,13 +28,20 @@ def reinitialize_session_delta_mins():
 
 def check_delta_mins():
     if session.get('delta_mins') is None:
-        reinitialize_session_delta_mins
+        reinitialize_session_delta_mins()
     if request.args.get('update') is not None:
         return force_update()
 
 def return_template_index_page():
+    if not ('latitude' in session) & ('longitude' in session):
+         _latitude = None
+         _longitude = None
+    else:
+        _latitude = session['latitude']
+        _longitude = session['longitude']
+
     return render_template(
         'dashboard.html',
         basic_content_boolean=True,
-        latitude=session['latitude'],
-        longitude=session['longitude'])
+        latitude = _latitude,
+        longitude= _longitude)
