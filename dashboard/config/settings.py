@@ -9,6 +9,7 @@ class BaseConfig():
    TEMPLATES_FOLDER = '/templates'
    DATABASE = "database.db"
 
+
 class DevConfig(BaseConfig):
    FLASK_ENV = 'development'
    DEBUG = True
@@ -24,3 +25,4 @@ class TestConfig(BaseConfig):
    DATABASE = "/var/www/dashboard/dashboard/database.db"
    TESTING = True
    DEBUG = True
+

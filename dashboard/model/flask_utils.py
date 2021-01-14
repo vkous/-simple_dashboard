@@ -13,7 +13,7 @@ import json
 
 
 def redirect_to_last_page():
-    last_page_url = request.referrers
+    last_page_url = request.referrer
     if (request.referrer.split('?')[0] == url_for('index')) | request.referrer is None :
         return redirect(url_for('index'))
     else:
