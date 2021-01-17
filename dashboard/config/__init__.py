@@ -6,7 +6,6 @@ import dashboard.config.settings
 # create settings object corresponding to specified env
 APP_ENV = os.environ.get('APP_ENV', 'Dev') #Dev as default value while APP_ENV not defined
 _current = getattr(sys.modules['dashboard.config.settings'], f'{APP_ENV}Config')() #Get appropriate class from settings
-
 # copy attributes to the module for convenience
 for atr in [f for f in dir(_current) if not '__' in f]:
    # environment can override anything

@@ -11,16 +11,22 @@ class BaseConfig():
 
 
 class DevConfig(BaseConfig):
+   def __init__(self): 
+      print('***** Environment : Dev')
    FLASK_ENV = 'development'
    DEBUG = True
 
 
 class ProductionConfig(BaseConfig):
+   def __init__(self): 
+      print('***** Environment : Production')
    FLASK_ENV = 'production'
    DATABASE = "/var/www/dashboard/dashboard/database.db"
 
 
 class TestConfig(BaseConfig):
+   def __init__(self): 
+      print('***** Environment : Test')
    FLASK_ENV = 'development'
    DATABASE = "/var/www/dashboard/dashboard/database.db"
    TESTING = True

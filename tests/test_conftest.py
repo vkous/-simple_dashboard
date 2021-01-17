@@ -14,37 +14,64 @@ from dotenv import load_dotenv
 load_dotenv()
 import dashboard.config
 
+app = create_app()
+
 @pytest.fixture # = simple interface to the application
 def client():
-    dashboard = create_app()
-    with dashboard.test_client() as client:
-        with dashboard.app_context():
-            yield client
+    with app.test_client() as client:
+        #with app.app_context():
+        yield client
 
-def test_url_index(client):
-    from dashboard import routes
+
+def test_index_view(client):
     response = client.get('/')
-    print(response)
     assert response.status_code == 200
 
 
-def test_url_weather(client):
-    from dashboard import routes
-    assert client.get('/view_weather').status_code == 200
+def test_first_visit_default_position(client):
+    response = client.get('/')
+    with client.session_transaction() as sess:
+        latitude = sess['latitude']
+        longitude = sess['longitude']
+    
+    assert (latitude == os.getenv('HOME_LATITUDE'))\
+    & (longitude == os.getenv('HOME_LONGITUDE'))
+
+def test_setting_office_position(client):
+    response = client.get('/?set_office=')
+    with client.session_transaction() as sess:
+        latitude = sess['latitude']
+        longitude = sess['longitude']
+    
+    assert (latitude == os.getenv('OFFICE_LATITUDE'))\
+    & (longitude == os.getenv('OFFICE_LONGITUDE'))
 
 
-def test_url_metro(client):
-    #assert client.get(url_for('view_metro')).status_code == 200
-    assert True == True
+def test_setting_home_position(client):
+    response = client.get('/?set_home=')
+    with client.session_transaction() as sess:
+        latitude = sess['latitude']
+        longitude = sess['longitude']
+    
+    assert (latitude == os.getenv('HOME_LATITUDE'))\
+    & (longitude == os.getenv('HOME_LONGITUDE'))
 
 
-def test_url_bikes(client):
-    #assert client.get(url_for('view_bikes')).status_code == 200
-    assert True == True
+def test_weather_view(client):
+    response = client.get('/view_weather')
+    assert response.status_code == 200
+    assert (b'Min' in response.data)\
+        & (b'Max' in response.data)\
+        & (b'Pluie' in response.data)
 
 
-def test_empty_db(client):
-    """Start with a blank database."""
+def test_metro_view(client):
+    response = client.get('/view_metro')
+    assert response.status_code == 200
+    assert b'Ligne' in response.data
 
-    rv = client.get('/')
-    assert b'No entries here so far' in rv.data
+
+def test_bikes_view(client):
+    response = client.get('/view_bikes')
+    assert response.status_code == 200
+    assert b'Station' in response.data

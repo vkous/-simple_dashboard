@@ -14,10 +14,14 @@ import json
 
 def redirect_to_last_page():
     last_page_url = request.referrer
-    if (len(request.referrer.split('?')) == 1) | (request.referrer is None) :
-        return redirect(url_for('index'))
+    if request.referrer is not None :
+        if (len(request.referrer.split('?')) == 1) | (request.referrer is None) :
+            return redirect(url_for('index'))
+        else:
+            return redirect(request.referrer)
     else:
-        return redirect(request.referrer)
+        print('redirect to last page : no last page')
+        return redirect(url_for('index'))
 
 def force_update():
     session['delta_mins'] = 1

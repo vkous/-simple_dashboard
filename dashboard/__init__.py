@@ -17,10 +17,10 @@ import dashboard.config
 
 
 def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    handler = RotatingFileHandler('dashboard.log', maxBytes=10000, backupCount=0)
+    app = Flask(__name__)
 
+    #LOGS
+    handler = RotatingFileHandler('dashboard.log', maxBytes=10000, backupCount=0)
     logging_formatter = logging.Formatter("%(asctime)s; %(levelname)s; %(message)s",
                               "%Y-%m-%d %H:%M:%S")
     handler.setFormatter(logging_formatter)
@@ -28,6 +28,8 @@ def create_app(test_config=None):
     app.logger.addHandler(handler)
     app.logger.info('======================= START ======================= ')
     app.logger.info(f'Starting app in {config.APP_ENV} environment')
+
+    #CONFIG
     app.config.from_object('dashboard.config')
     app.config.update(
         SECRET_KEY=os.environ.get('FLASK_SECRET')
@@ -47,6 +49,6 @@ def create_app(test_config=None):
         #initialisation database (first execution)
         if not os.path.exists(app.config['DATABASE']):
             db.init_db()
-        #from . import routes
+        # GET ROUTES
         from . import routes
     return app
