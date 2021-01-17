@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 from flask import Flask
-from flask import current_app as app
+#from flask import current_app as app
 import logging
 from logging.handlers import RotatingFileHandler
 
@@ -31,9 +31,7 @@ def create_app(test_config=None):
     app.config.from_object('dashboard.config')
     app.config.update(
         SECRET_KEY=os.environ.get('FLASK_SECRET')
-)
-
-
+        )
     # ensure the instance folder exists
     try:
         app.logger.info('Create instance path if doesn\'t exist')

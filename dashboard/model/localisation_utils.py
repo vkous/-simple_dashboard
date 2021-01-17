@@ -39,7 +39,6 @@ def _get_longitude_request_arg():
 def _get_position_request_args():
     lat_tuple = _get_latitude_request_arg()
     lon_tuple = _get_longitude_request_arg()
-    print(lat_tuple, lon_tuple)
     if lat_tuple[0] is False | lon_tuple[0] is False:
         return (False, )
     elif (lat_tuple[1] is None) | (lon_tuple[1] is None):
@@ -69,7 +68,7 @@ def check_default_position():
         _set_home_position()
 
 def get_index_or_get_and_set_latitude_and_longitude():
-    print(request.referrer)
+
     position_got_tuple = _get_position_request_args()
     if (position_got_tuple[0] is True) :
         #update position to desired position
@@ -95,6 +94,5 @@ def get_index_or_get_and_set_latitude_and_longitude():
         _set_home_position()
         if 'set_home' in request.args:
             return redirect_to_last_page()
-        print('Je suis là')
-    print('bizarre')
+
     return return_template_index_page()
